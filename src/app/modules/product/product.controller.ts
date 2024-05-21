@@ -5,7 +5,6 @@ import productValidationSchema from "./product.validation";
 const createProduct = async (req: Request, res: Response) => {
   try {
     const { product: productData } = req.body;
-
     // ZOD Validation and parsing
     const parsedProductData = productValidationSchema.parse(productData);
 
@@ -40,9 +39,9 @@ const getAllProducts = async (req: Request, res: Response) => {
           data: searchesProducts,
         });
       } else {
-        return res.status(500).json({
+        return res.status(204).json({
           success: false,
-          message: `Products matching search term '${searchTerm}' fetched failed!`,
+          message: `Products matching with '${searchTerm}' have no product!`,
           data: searchesProducts,
         });
       }

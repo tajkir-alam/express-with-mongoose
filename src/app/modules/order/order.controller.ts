@@ -22,8 +22,39 @@ const createOrder = async (req: Request, res: Response) => {
 };
 
 const getOrderList = async (req: Request, res: Response) => {
-  const result = await orderServices.getOrderListFromDB();
+  const { email } = req.query;
+
+  if (email) {
+    try {
+      const filterByEmail = await orderServices.filterOrderListFromDB(
+        email as string
+      );
+      console.log(filterByEmail);
+      if (filterByEmail.length > 0) {
+        return res.status(200).json({
+          success: true,
+          message: `Orders fetched successfully for user ${email!}`,
+          data: filterByEmail,
+        });
+      } else {
+        return res.status(204).json({
+          success: false,
+          message: `${email!} did not ordered any product yet!`,
+          data: filterByEmail,
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "Unable to find your order",
+        data: error,
+      });
+    }
+  }
+
+  // Fetch all orders
   try {
+    const result = await orderServices.getOrderListFromDB();
     res.status(200).json({
       success: true,
       message: "Orders Fetched successfully!",

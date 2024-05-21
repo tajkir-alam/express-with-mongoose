@@ -15,7 +15,8 @@ const variantsSchema = new Schema<TVariants>({
 const inventorySchema = new Schema<TInventory>({
   quantity: {
     type: Number,
-    required: true,
+    min: [0, 'quantity have to be 0'],
+    required: [true, 'the minimum quantity have to be 0'],
   },
   inStock: {
     type: Boolean,
@@ -25,32 +26,33 @@ const inventorySchema = new Schema<TInventory>({
 const productSchema = new Schema<TProduct>({
   name: {
     type: String,
-    required: true,
+    required: [true, "please enter a valid name"],
   },
   description: {
     type: String,
     minlength: 50,
-    required: true,
+    required: [true, "description should have at least 50 characters"],
   },
   price: {
     type: Number,
-    required: true,
+    min: 1,
+    required: [true, "minimum price have to be 1"],
   },
   category: {
     type: String,
-    required: true,
+    required: [true, "please select category"],
   },
   tags: {
     type: [String],
-    required: true,
+    required: [true, "enter product tags"],
   },
   variants: {
     type: [variantsSchema],
-    required: true,
+    required: [true, "please provide variants of the product"],
   },
   inventory: {
     type: inventorySchema,
-    required: true,
+    required: [true, "please provide stock inventory"],
   },
 });
 

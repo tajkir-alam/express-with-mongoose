@@ -41,7 +41,25 @@ const getAllProducts = async (req: Request, res: Response) => {
   }
 };
 
+const getSingleProduct = async (req: Request, res: Response) => {
+  const { productId } = req.params;
+  try {
+    const result = await productServices.getSingleProductFromDB(productId);
+    res.status(200).json({
+      success: true,
+      message: "Product fetched successfully!",
+      data: result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: `there is no data which contains ${productId}`,
+    });
+  }
+};
+
 export const productController = {
   createProduct,
   getAllProducts,
+  getSingleProduct,
 };

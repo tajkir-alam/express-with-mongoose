@@ -89,11 +89,10 @@ const getSingleProduct = async (req: Request, res: Response) => {
 
 const updateProduct = async (req: Request, res: Response) => {
   try {
-    const { product: productData } = req.body;
     const { productId } = req.params;
 
     // ZOD Validation and parsing
-    const parsedProductData = productValidationSchema.parse(productData);
+    const parsedProductData = productValidationSchema.parse(req.body);
 
     const result = await productServices.updateProductIntoDB(
       productId,

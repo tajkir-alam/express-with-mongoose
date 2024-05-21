@@ -5,12 +5,11 @@ import { productServices } from "../product/product.service";
 
 const createOrder = async (req: Request, res: Response) => {
   try {
-    const { order: OrderData } = req.body;
-    const parsedOrderData = orderValidationSchema.parse(OrderData);
+    const parsedOrderData = orderValidationSchema.parse(req.body);
 
     // fetching the product which is going to order
     const orderingProduct = await productServices.getSingleProductFromDB(
-      OrderData.productId
+      req.body.productId
     );
     if (!orderingProduct) {
       return res.status(404).json({

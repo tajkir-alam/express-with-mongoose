@@ -5,6 +5,8 @@ import productValidationSchema from "./product.validation";
 const createProduct = async (req: Request, res: Response) => {
   try {
     const { product: productData } = req.body;
+
+    // ZOD Validation and parsing
     const parsedProductData = productValidationSchema.parse(productData);
 
     const result = await productServices.createProductIntoDB(parsedProductData);

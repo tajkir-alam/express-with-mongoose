@@ -25,6 +25,37 @@ const createProduct = async (req: Request, res: Response) => {
 };
 
 const getAllProducts = async (req: Request, res: Response) => {
+  // Fetch according by query
+  const { searchTerm } = req.query;
+
+  if (searchTerm) {
+    try {
+      const searchesProducts = await productServices.searchProductsFromDB(
+        searchTerm as string
+      );
+      if (searchesProducts.length > 0) {
+        return res.status(200).json({
+          success: true,
+          message: `Products matching search term '${searchTerm}' fetched successfully!`,
+          data: searchesProducts,
+        });
+      } else {
+        return res.status(500).json({
+          success: false,
+          message: `Products matching search term '${searchTerm}' fetched failed!`,
+          data: searchesProducts,
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "Please check the search value again",
+        data: error,
+      });
+    }
+  }
+
+  // Fetch all data
   try {
     const result = await productServices.getAllProductsFromDB();
     res.status(200).json({

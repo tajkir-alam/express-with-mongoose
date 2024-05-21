@@ -58,6 +58,32 @@ const getSingleProduct = async (req: Request, res: Response) => {
   }
 };
 
+const updateProduct = async (req: Request, res: Response) => {
+  try {
+    const { product: productData } = req.body;
+    const { productId } = req.params;
+
+    // ZOD Validation and parsing
+    const parsedProductData = productValidationSchema.parse(productData);
+
+    const result = await productServices.updateProductIntoDB(
+      productId,
+      parsedProductData
+    );
+    res.status(200).json({
+      success: true,
+      message: "Product updated successfully!",
+      data: result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Product failed to update",
+      data: error,
+    });
+  }
+};
+
 const deleteProduct = async (req: Request, res: Response) => {
   const { productId } = req.params;
   try {
@@ -80,5 +106,6 @@ export const productController = {
   createProduct,
   getAllProducts,
   getSingleProduct,
+  updateProduct,
   deleteProduct,
 };

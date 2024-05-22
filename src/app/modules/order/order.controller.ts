@@ -6,15 +6,35 @@ import { productServices } from "../product/product.service";
 const createOrder = async (req: Request, res: Response) => {
   try {
     const { order: OrderData } = req.body;
-
-    // const orderingProduct = await productServices.updateProductIntoDB(
-    //   OrderData.productId,
-    //   OrderData.quantity
-    // );
-
-    // console.log(OrderData);
-
     const parsedOrderData = orderValidationSchema.parse(OrderData);
+
+    const orderingProduct = await productServices.getSingleProductFromDB(
+      OrderData.productId
+    );
+    if (!orderingProduct) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    if (orderingProduct.inventory.quantity < parsedOrderData.quantity) {
+      return res.status(400).json({
+        success: false,
+        message: "Insufficient quantity available in inventory",
+      });
+    }
+
+    const updatedProduct = await productServices.updateProductInventory(
+      parsedOrderData.productId,
+      orderingProduct.inventory.quantity - parsedOrderData.quantity
+    );
+    if (!updatedProduct) {
+      return res.status(500).json({
+        success: false,
+        message: "Failed to update product inventory",
+      });
+    }
     const result = await orderServices.createOrderIntoDB(parsedOrderData);
     res.status(200).json({
       success: true,

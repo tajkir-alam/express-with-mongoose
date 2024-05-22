@@ -42,6 +42,18 @@ const searchProductsFromDB = async (searchTerm: string) => {
   return result;
 };
 
+const updateProductInventory = async (id: string, quantity: number) => {
+  const updateProduct = await ProductModel.findByIdAndUpdate(
+    id,
+    {
+      "inventory.quantity": quantity,
+      "inventory.inStock": quantity > 0,
+    },
+    { new: true }
+  );
+  return updateProduct;
+};
+
 export const productServices = {
   createProductIntoDB,
   getAllProductsFromDB,
@@ -49,4 +61,5 @@ export const productServices = {
   updateProductIntoDB,
   deleteProductFromDB,
   searchProductsFromDB,
+  updateProductInventory,
 };

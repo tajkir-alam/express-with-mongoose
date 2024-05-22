@@ -1,10 +1,19 @@
 import { Request, Response } from "express";
 import { orderServices } from "./order.service";
 import orderValidationSchema from "./order.validation";
+import { productServices } from "../product/product.service";
 
 const createOrder = async (req: Request, res: Response) => {
   try {
     const { order: OrderData } = req.body;
+
+    // const orderingProduct = await productServices.updateProductIntoDB(
+    //   OrderData.productId,
+    //   OrderData.quantity
+    // );
+
+    // console.log(OrderData);
+
     const parsedOrderData = orderValidationSchema.parse(OrderData);
     const result = await orderServices.createOrderIntoDB(parsedOrderData);
     res.status(200).json({
@@ -29,7 +38,6 @@ const getOrderList = async (req: Request, res: Response) => {
       const filterByEmail = await orderServices.filterOrderListFromDB(
         email as string
       );
-      console.log(filterByEmail);
       if (filterByEmail.length > 0) {
         return res.status(200).json({
           success: true,

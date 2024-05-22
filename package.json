@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:prod": "node ./dist/server.js",
+    "start": "node ./dist/server.js",
     "start:dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
     "lint": "npx eslint src --ignore-pattern .ts",
@@ -29,7 +29,7 @@
     "@types/node": "^20.12.12",
     "@typescript-eslint/eslint-plugin": "^7.10.0",
     "@typescript-eslint/parser": "^7.10.0",
-    "eslint": "^9.3.0",
+    "eslint": "^8.55.0",
     "globals": "^15.3.0",
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.10.0"

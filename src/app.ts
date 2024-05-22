@@ -11,11 +11,8 @@ app.use(cors());
 app.use("/api/products", ProductRoutes);
 app.use("/api/orders", OrderRoutes);
 
-// Home route
+// Home route and drive to other route
 app.get("/", (req: Request, res: Response) => {
-  // res.status(200).json({
-  //   "Get All Product": "www.fdfd.com"
-  // });
   res.status(200).send(
     `
     <h1 style="text-align: center;">API Documentation</h1>
@@ -45,6 +42,7 @@ app.get("/", (req: Request, res: Response) => {
   );
 });
 
+// No route middleware
 app.use((req: Request, res: Response) => {
   res.status(404).json({
     success: false,

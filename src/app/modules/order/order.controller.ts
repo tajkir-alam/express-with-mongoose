@@ -8,6 +8,7 @@ const createOrder = async (req: Request, res: Response) => {
     const { order: OrderData } = req.body;
     const parsedOrderData = orderValidationSchema.parse(OrderData);
 
+    // fetching the product which is going to order
     const orderingProduct = await productServices.getSingleProductFromDB(
       OrderData.productId
     );
@@ -18,6 +19,7 @@ const createOrder = async (req: Request, res: Response) => {
       });
     }
 
+    // Checking if the order quantity is in stock or not!
     if (orderingProduct.inventory.quantity < parsedOrderData.quantity) {
       return res.status(400).json({
         success: false,
@@ -25,6 +27,7 @@ const createOrder = async (req: Request, res: Response) => {
       });
     }
 
+    // this function is decreasing the product quantity as per the order quantity
     const updatedProduct = await productServices.updateProductInventory(
       parsedOrderData.productId,
       orderingProduct.inventory.quantity - parsedOrderData.quantity
@@ -53,6 +56,7 @@ const createOrder = async (req: Request, res: Response) => {
 const getOrderList = async (req: Request, res: Response) => {
   const { email } = req.query;
 
+  // filtering with email if user give any email query parameter
   if (email) {
     try {
       const filterByEmail = await orderServices.filterOrderListFromDB(
